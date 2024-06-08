@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  hook_backup:
+    image: hook_bkp
+    container_name: ${BKP_CONTAINER_NAME}
+    restart: always
+    volumes:
+      - ${BKP_VOLUME}:/backups
+      - ${ALL_DRIVE}:/all_drive
+    depends_on:
+    environment:
+      - CLEANUP_OLDER_THAN=${CLEANUP_OLDER_THAN}
+
+networks:
+    default:
+       external:
+         name: webproxy
+

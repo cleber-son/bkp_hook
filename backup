@@ -1,0 +1,16 @@
+#!/bin/bash
+set -e
+
+cleanup() {
+  echo "Cleanup backup older than $CLEANUP_OLDER_THAN days"
+  toberemove=$(find /backups/ -type f -not -name ".*" -mtime +$CLEANUP_OLDER_THAN | wc -l)
+  echo "Will try to remove $toberemove files"
+  find /backups/ -type f -not -name ".*" -mtime +$CLEANUP_OLDER_THAN -exec rm {} \;
+}
+
+if [ -n "$CLEANUP_OLDER_THAN" ]; then cleanup;  fi
+
+echo 'creating backup archive of all_driver'
+tar --create --gzip -vv --directory="/all_drive/" --file="/backups/backup_`date '+%Y%m%d'`.tar.gz" "./"
+
+echo 'Finished: SUCCESS'
